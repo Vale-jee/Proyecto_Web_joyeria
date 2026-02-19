@@ -1,0 +1,72 @@
+body {
+    font-family: 'Georgia', serif; /* Fuente elegante para joyería */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #fdfbf0; /* Un color crema suave de fondo */
+    color: #333;
+}
+
+header {
+    background-color: #1a1a1a; /* Negro elegante */
+    color: #d4af37; /* Dorado metálico */
+    padding: 2rem 1rem;
+    text-align: center;
+    border-bottom: 4px solid #b8860b;
+}
+
+header h1 {
+    margin: 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Menú de Navegación */
+nav {
+    margin-top: 15px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #d4af37;
+}
+
+/* Contenido Principal */
+main {
+    padding: 40px;
+    min-height: 400px;
+    background-color: #ffffff;
+    max-width: 900px;
+    margin: 20px auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Pie de Página (Footer) */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1a1a1a;
+    color: #888;
+    font-size: 0.8rem;
+    margin-top: 40px;
+}
+
+/* Estilos para los botones del catálogo */
+.btn-detalle {
+    display: inline-block;
+    background-color: #b8860b;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 2px;
+}

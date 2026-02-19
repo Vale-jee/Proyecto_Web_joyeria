@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo - Joyería Resplandor{% endblock %}
+
+{% block content %}
+<section style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #b8860b; font-size: 2rem;">Nuestra Colección</h2>
+        <p style="color: #666;">Seleccione una categoría para ver los detalles de nuestras piezas elaboradas a mano.</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <div style="border: 1px solid #d4af37; padding: 20px; background-color: #fff; border-left: 8px solid #d4af37;">
+            <h3 style="margin-top: 0; color: #2c3e50;">💍 Anillos</h3>
+            <p>Piezas únicas talladas en oro de 18k con diamantes y piedras preciosas.</p>
+            <a href="{{ url_for('detalle_producto', nombre='anillos') }}" style="color: #b8860b; font-weight: bold; text-decoration: none;">Ver detalles del producto →</a>
+        </div>
+
+        <div style="border: 1px solid #d4af37; padding: 20px; background-color: #fff; border-left: 8px solid #d4af37;">
+            <h3 style="margin-top: 0; color: #2c3e50;">✨ Pulseras</h3>
+            <p>Elegancia en cada eslabón, disponibles en plata ley 925 y oro 18kg.</p>
+            <a href="{{ url_for('detalle_producto', nombre='pulseras') }}" style="color: #b8860b; font-weight: bold; text-decoration: none;">Ver detalles del producto →</a>
+        </div>
+
+        <div style="border: 1px solid #d4af37; padding: 20px; background-color: #fff; border-left: 8px solid #d4af37;">
+            <h3 style="margin-top: 0; color: #2c3e50;">📿 Cadenas y Dijes</h3>
+            <p>Tejidos finos y diseños personalizados de calidad.</p>
+            <a href="{{ url_for('detalle_producto', nombre='cadenas') }}" style="color: #b8860b; font-weight: bold; text-decoration: none;">Ver detalles del producto →</a>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 40px; text-align: center; font-size: 0.9rem; color: #888;">
+        <p>Cada pieza incluye certificado de autenticidad emitido en nuestro taller.</p>
+    </div>
+
+</section>
+{% endblock %}

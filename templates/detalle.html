@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %} Detalle de Joya {% endblock %}
+
+{% block content %}
+    <h2>💎 Detalles de la pieza: {{ nombre|capitalize }}</h2>
+    <p>Esta es una joya exclusiva de nuestra colección Resplandor.</p>
+    <p>Material: Oro de 18k / Plata Ley 925</p>
+    <hr>
+    <a href="{{ url_for('catalogo') }}">Volver al catálogo</a>
+{% endblock %}

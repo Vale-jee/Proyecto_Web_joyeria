@@ -1,28 +1,26 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 # 1. RUTA PRINCIPAL
 @app.route('/')
 def inicio():
-    return "<h1>Sistema Joyería Resplandor</h1><p>Bienvenido al catálogo de piezas exclusivas y joyería fina.</p>"
+    return render_template('index.html')
 
-# 2. RUTA DE CATÁLOGO 
+# 2. RUTA NOSOTROS
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+# 3. RUTA CATÁLOGO (General)
 @app.route('/producto')
 def catalogo():
-    return """
-    <h2>Catálogo General de Productos</h2>
-    <p>Categorías activas:</p>
-    <ul>
-        <li>Anillos</li>
-        <li>Pulseras</li>
-        <li>Cadenas</li>
-        <li>Relojes</li>
-    """
-# 3. RUTA DINÁMICA
+    return render_template('producto.html')
+
+# 4. RUTA DETALLE DE PRODUCTO 
 @app.route('/producto/<nombre>')
 def detalle_producto(nombre):
-    return f"<h2>Producto: {nombre.capitalize()}</h2><p>Estado: <strong>Disponible para entrega inmediata.</strong></p>"
+    return render_template('detalle.html', nombre=nombre)
 
 if __name__ == '__main__':
     app.run(debug=True)
