@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request # 'request' para detectar clics
 from inventario import Catalogo 
+import os
 
 app = Flask(__name__)
 
@@ -36,5 +37,7 @@ def detalle_producto(nombre):
     
     return render_template('detalle.html', joya=joya_encontrada)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
