@@ -1,11 +1,43 @@
 {% extends 'base.html' %}
 
-{% block title %} Detalle de Joya {% endblock %}
-
 {% block content %}
-    <h2>💎 Detalles de la pieza: {{ nombre|capitalize }}</h2>
-    <p>Esta es una joya exclusiva de nuestra colección Resplandor.</p>
-    <p>Material: Oro de 18k / Plata Ley 925</p>
-    <hr>
-    <a href="{{ url_for('catalogo') }}">Volver al catálogo</a>
+<section style="max-width: 850px; margin: 40px auto; padding: 30px; background: #fff; border: 1px solid #d4af37; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+    <div style="margin-bottom: 20px;">
+        <a href="javascript:history.back()" style="color: #b8860b; text-decoration: none; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 5px;">
+            ⬅️ Volver a la Colección
+        </a>
+    </div>
+    <h1 style="color: #1a1a1a; font-family: 'serif';">💎 Detalles de la pieza: {{ joya.modelo }}</h1>
+    <p style="color: #b8860b; font-weight: bold; letter-spacing: 1px;">Colección {{ joya.coleccion }} - Quito, Ecuador</p>
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;">
+        <div>
+            <p style="font-size: 1.1rem;"><strong>Modelo:</strong> {{ joya.modelo }}</p>
+            <p style="font-size: 1.1rem;"><strong>Material:</strong> {{ joya.material }}</p>
+            <p style="font-size: 1.1rem;"><strong>Peso de la Joya:</strong> {{ joya.peso }}</p>
+            
+            <div style="margin-top: 25px; padding: 20px; background: #fdfaf3; border-left: 5px solid #b8860b;">
+                <h4 style="margin-top: 0; color: #1a1a1a;">Descripción de la pieza</h4>
+                <p style="font-style: italic; color: #444; line-height: 1.6;">
+                    Esta exclusiva joya de la línea <strong>{{ joya.coleccion }}</strong> ha sido cuidadosamente elaborada en <strong>{{ joya.material }}</strong>, 
+                    alcanzando un peso de <strong>{{ joya.peso }}</strong>. Un diseño artesanal que fusiona elegancia y distinción, ideal para momentos inolvidables.
+                </p>
+            </div>
+        </div>
+
+        <div style="background: #1a1a1a; color: #fff; padding: 25px; border-radius: 5px; text-align: center;">
+            <p style="color: #d4af37; font-size: 0.9rem; text-transform: uppercase;">Precio de Venta</p>
+            <h2 style="font-size: 2.5rem; margin: 10px 0;">${{ "{:,.2f}".format(joya.precio) }}</h2>
+            <p style="font-size: 0.8rem; opacity: 0.8;">Disponibilidad: {{ joya.cantidad }} unidades en stock</p>
+            
+            <hr style="border-color: #333;">
+            <p style="font-size: 0.85rem; text-align: left;">✓ Certificado de Autenticidad<br>✓ Garantía de por vida en materiales</p>
+            
+            <button style="width: 100%; padding: 15px; margin-top: 20px; background: #d4af37; color: #1a1a1a; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase;">
+                Solicitar por WhatsApp
+            </button>
+        </div>
+    </div>
+</section>
 {% endblock %}
