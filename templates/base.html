@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Joyería Resplandor {% endblock %}</title>
+    <title>{% block title %}Joyería Resplandor{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -13,7 +13,8 @@
         <nav>
             <a href="{{ url_for('inicio') }}" style="color: gold; margin: 10px; text-decoration: none;">Inicio</a> | 
             <a href="{{ url_for('about') }}" style="color: gold; margin: 10px; text-decoration: none;">Nosotros</a> | 
-            <a href="{{ url_for('catalogo') }}" style="color: gold; margin: 10px; text-decoration: none;">Catálogo</a>
+            <a href="{{ url_for('catalogo') }}" style="color: gold; margin: 10px; text-decoration: none;">Catálogo</a> | 
+            <a href="{{ url_for('inventario') }}" style="color: gold; margin: 10px; text-decoration: none;">Inventario</a> |
         </nav>
     </header>
 
@@ -29,6 +30,35 @@
     <footer style="text-align: center; font-size: 0.9em; color: gray;">
         <p>&copy; 2026 Joyería Resplandor | Quito, Ecuador</p>
     </footer>
+    <!-- Modal de Confirmación -->
+<div id="modalConfirmacion" class="modal">
+    <div class="modal-contenido">
+        <p>¿Está seguro que desea eliminar este producto?</p>
+        <div class="modal-botones">
+            <button onclick="cerrarModal()" class="btn-cancelar">Cancelar</button>
+            <button onclick="confirmarAccion()" class="btn-confirmar">Sí, eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let urlEliminar = "";
+
+function confirmarEliminacion(event, url) {
+    event.preventDefault();
+    urlEliminar = url;
+    document.getElementById("modalConfirmacion").style.display = "flex";
+}
+
+function cerrarModal() {
+    document.getElementById("modalConfirmacion").style.display = "none";
+}
+
+function confirmarAccion() {
+    window.location.href = urlEliminar;
+}
+</script>
+
 
 </body>
 </html>

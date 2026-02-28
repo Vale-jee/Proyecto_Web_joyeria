@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center; color:#1e3a8a;">Inventario de Productos</h2>
+
+<div style="text-align:center; margin-bottom:20px;">
+    <a href="{{ url_for('agregar') }}" class="btn-agregar-principal">
+        ➕ Agregar Producto
+    <a href="{{ url_for('buscar') }}" class="btn-buscar-principal">
+        🔍 Buscar Producto
+    </a>
+</div>
+
+<table border="1" style="width:85%; margin:auto; border-collapse: collapse; text-align:center;">
+    <tr style="background-color:#1e88e5; color:white;">
+        <th>ID</th>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for p in productos %}
+    <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.modelo }}</td>
+        <td>${{ p.precio }}</td>
+        <td>{{ p.cantidad }}</td>
+        <td>
+            <a href="{{ url_for('editar', id=p.id) }}" class="btn-editar">Editar</a>
+           <a href="{{ url_for('eliminar', id=p.id) }}" 
+   class="btn-eliminar"
+   onclick="confirmarEliminacion(event, this.href)">
+   Eliminar
+</a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

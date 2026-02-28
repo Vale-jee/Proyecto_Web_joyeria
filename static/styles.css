@@ -1,15 +1,19 @@
+/* ESTILOS GENERALES */
+
 body {
-    font-family: 'Georgia', serif; /* Fuente elegante para joyería */
+    font-family: 'Georgia', serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #fdfbf0; /* Un color crema suave de fondo */
+    background-color: #fdfbf0;
     color: #333;
 }
 
+/* HEADER */
+
 header {
-    background-color: #1a1a1a; /* Negro elegante */
-    color: #d4af37; /* Dorado metálico */
+    background-color: #1a1a1a;
+    color: #d4af37;
     padding: 2rem 1rem;
     text-align: center;
     border-bottom: 4px solid #b8860b;
@@ -21,7 +25,8 @@ header h1 {
     text-transform: uppercase;
 }
 
-/* Menú de Navegación */
+/* MENÚ DE NAVEGACIÓN */
+
 nav {
     margin-top: 15px;
 }
@@ -40,7 +45,8 @@ nav a:hover {
     color: #d4af37;
 }
 
-/* Contenido Principal */
+/* CONTENIDO PRINCIPAL */
+
 main {
     padding: 40px;
     min-height: 400px;
@@ -50,7 +56,8 @@ main {
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
-/* Pie de Página (Footer) */
+/* FOOTER */
+
 footer {
     text-align: center;
     padding: 20px;
@@ -60,7 +67,8 @@ footer {
     margin-top: 40px;
 }
 
-/* Estilos para los botones del catálogo */
+/* BOTÓN DETALLE CATÁLOGO */
+
 .btn-detalle {
     display: inline-block;
     background-color: #b8860b;
@@ -69,4 +77,208 @@ footer {
     text-decoration: none;
     font-weight: bold;
     border-radius: 2px;
+}
+
+/* TABLA INVENTARIO */
+
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+th {
+    background-color: #1a1a1a;
+    color: #d4af37;
+    padding: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+/* BOTONES GENERALES */
+
+.btn {
+    background-color: #4caf50;
+    padding: 8px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+/* BOTONES INVENTARIO */
+
+.btn-editar {
+    background-color: #1e88e5;
+    padding: 6px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin: 2px;
+}
+
+.btn-eliminar {
+    background-color: #c62828;
+    padding: 6px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin: 2px;
+}
+
+.btn-buscar {
+    background-color: #b8860b;
+    padding: 6px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin: 2px;
+}
+
+.btn-agregar {
+    background-color: #2e7d32;
+    padding: 6px 12px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin: 2px;
+}
+
+.btn-editar:hover,
+.btn-eliminar:hover,
+.btn-buscar:hover,
+.btn-agregar:hover {
+    opacity: 0.85;
+}
+.btn-agregar-principal {
+    background-color: #2e7d32;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.btn-agregar-principal:hover {
+    opacity: 0.85;
+}
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.form-editar {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-editar label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.form-editar input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-guardar {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #b8860b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-guardar:hover {
+    opacity: 0.9;
+}
+
+.btn-volver {
+    color: #b8860b;
+    text-decoration: none;
+    font-weight: bold;
+}
+.btn-buscar-principal {
+    background-color: #b8860b;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.btn-buscar-principal:hover {
+    opacity: 0.85;
+}
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-contenido {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.modal-botones {
+    margin-top: 20px;
+}
+
+.btn-cancelar {
+    background-color: #777;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-right: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-confirmar {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-cancelar:hover,
+.btn-confirmar:hover {
+    opacity: 0.85;
 }

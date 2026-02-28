@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center; color:#b8860b;">Agregar Producto</h2>
+
+<div class="form-container">
+
+    <form method="POST" class="form-editar">
+
+        <label>Modelo</label>
+        <input type="text" name="modelo" required>
+
+        <label>Colección</label>
+        <input type="text" name="coleccion" required>
+
+        <label>Material</label>
+        <input type="text" name="material" required>
+
+        <label>Peso</label>
+        <input type="text" name="peso" required>
+
+        <label>Cantidad</label>
+        <input type="number" name="cantidad" required>
+
+        <label>Precio</label>
+        <input type="number" step="0.01" name="precio" required>
+
+        <button type="submit" class="btn-guardar">
+            ➕ Guardar Producto
+        </button>
+
+    </form>
+
+</div>
+
+<div style="text-align:center; margin-top:20px;">
+    <a href="{{ url_for('inventario') }}" class="btn-volver">
+        Volver
+    </a>
+</div>
+
+{% endblock %}

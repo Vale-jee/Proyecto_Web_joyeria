@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center; color:#b8860b;">Buscar Producto</h2>
+
+<div class="form-container">
+
+    <form method="POST" class="form-editar">
+
+        <label>Nombre del producto</label>
+        <input type="text" name="nombre" placeholder="Ej: Collar, Dije..." required>
+
+        <button type="submit" class="btn-guardar">🔍 Buscar</button>
+
+    </form>
+
+</div>
+
+{% if productos %}
+    <div style="margin-top:30px;">
+        <h3 style="text-align:center;">Resultados</h3>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+            </tr>
+
+            {% for p in productos %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.modelo }}</td>
+                <td>${{ p.precio }}</td>
+                <td>{{ p.cantidad }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+<div style="text-align:center; margin-top:20px;">
+    <a href="{{ url_for('inventario') }}" class="btn-volver">Volver</a>
+</div>
+
+{% endblock %}
