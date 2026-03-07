@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="titulo-contacto">📩 Contáctanos</h2>
+
+{% if mensaje_enviado %}
+<div class="mensaje-exito">
+    ✅ Mensaje enviado correctamente
+</div>
+{% endif %}
+
+<div class="card-contacto">
+
+<form method="POST">
+
+<input type="text" name="nombre" placeholder="Tu nombre" required class="input-contacto">
+
+<input type="email" name="email" placeholder="Tu email" required class="input-contacto">
+
+<input type="tel" name="telefono" placeholder="Número de teléfono" required class="input-contacto">
+
+<textarea name="mensaje" placeholder="Escribe tu mensaje..." required class="textarea-contacto"></textarea>
+
+<button type="submit" class="btn-enviar">
+    Enviar Mensaje
+</button>
+
+</form>
+
+<h3 class="titulo-mensajes">Mensajes recibidos</h3>
+
+<table class="tabla-mensajes">
+
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Email</th>
+<th>Teléfono</th>
+<th>Mensaje</th>
+<th>Eliminar</th>
+</tr>
+
+{% for m in mensajes %}
+<tr>
+
+<td>{{ m.id }}</td>
+<td class="col-nombre">{{ m.nombre }}</td>
+<td>{{ m.email }}</td>
+<td>{{ m.telefono }}</td>
+<td>{{ m.mensaje }}</td>
+
+<td>
+<a href="/eliminar_mensaje/{{ m.id }}" class="btn-eliminar">
+Eliminar
+</a>
+</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

@@ -1,11 +1,40 @@
-from flask import Flask, render_template, request # 'request' para detectar clics
+from flask import Flask, render_template, request, redirect # 'request' para detectar clics
+from flask_sqlalchemy import SQLAlchemy
 from inventario import Catalogo 
-from flask import request, redirect
-from inventario import Catalogo
+from inventario import guardar_txt, guardar_json, guardar_csv, leer_txt, leer_json, leer_csv
 import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 app = Flask(__name__, template_folder='templates')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'joyeria_orm.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+db = SQLAlchemy(app)
+
+class ProductoORM(db.Model):
+    __tablename__ = 'productos_orm'
+
+    id = db.Column(db.Integer, primary_key=True)
+    modelo = db.Column(db.String(100))
+    precio = db.Column(db.Float)
+    cantidad = db.Column(db.Integer)
+
+    def __repr__(self):
+        return f"<Producto {self.modelo}>"
+    
+
+class MensajeORM(db.Model):
+    __tablename__ = 'mensajes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+    telefono = db.Column(db.String(20))
+    mensaje = db.Column(db.Text)
+
+    def __repr__(self):
+        return f"<Mensaje {self.nombre}>"
 
 @app.route('/')
 def inicio():
@@ -59,7 +88,15 @@ def agregar():
         precio = float(request.form['precio'])
 
         mi_catalogo.añadir_pieza(modelo, coleccion, material, peso, cantidad, precio)
+        producto_dict = {
+            "modelo": modelo,
+            "precio": precio,
+            "cantidad": cantidad
+        }
 
+        guardar_txt(producto_dict)
+        guardar_json(producto_dict)
+        guardar_csv(producto_dict)
         return redirect('/inventario')
 
     return render_template('agregar.html')
@@ -102,6 +139,63 @@ def buscar():
         resultados = mi_catalogo.buscar_por_nombre(nombre)
 
     return render_template('buscar.html', productos=resultados)
+
+@app.route('/ver_datos')
+def ver_datos():
+    from inventario import leer_txt, leer_json, leer_csv
+    
+    datos_txt = leer_txt()
+    datos_json = leer_json()
+    datos_csv = leer_csv()
+
+    return render_template(
+        'datos.html',
+        datos_txt=datos_txt,
+        datos_json=datos_json,
+        datos_csv=datos_csv
+    )
+
+
+@app.route('/contacto', methods=['GET', 'POST'])
+def contacto():
+    mensaje_enviado = False
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        email = request.form['email']
+        telefono = request.form['telefono']
+        mensaje = request.form['mensaje']
+
+        nuevo = MensajeORM(
+            nombre=nombre,
+            email=email,
+            telefono=telefono,
+            mensaje=mensaje
+        )
+
+        db.session.add(nuevo)
+        db.session.commit()
+
+        mensaje_enviado = True
+
+    mensajes = MensajeORM.query.all()
+
+    return render_template(
+        'contacto.html',
+        mensaje_enviado=mensaje_enviado,
+        mensajes=mensajes
+    )
+
+@app.route('/eliminar_mensaje/<int:id>')
+def eliminar_mensaje(id):
+    mensaje = MensajeORM.query.get(id)
+
+    if mensaje:
+        db.session.delete(mensaje)
+        db.session.commit()
+
+    return redirect('/contacto')
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))

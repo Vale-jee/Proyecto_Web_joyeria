@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 style="text-align:center;">Persistencia de Datos</h2>
+
+<!-- ================= TXT ================= -->
+<h3>📄 Datos TXT</h3>
+<table border="1" style="width:80%; margin:auto; text-align:center;">
+    <tr>
+        <th>Modelo</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+    </tr>
+    {% for d in datos_txt %}
+    <tr>
+        <td>{{ d[0] }}</td>
+        <td>{{ d[1] }}</td>
+        <td>{{ d[2] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br><br>
+
+<!-- ================= JSON ================= -->
+<h3>📘 Datos JSON</h3>
+<table border="1" style="width:80%; margin:auto; text-align:center;">
+    <tr>
+        <th>Modelo</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+    </tr>
+    {% for d in datos_json %}
+    <tr>
+        <td>{{ d.modelo }}</td>
+        <td>{{ d.precio }}</td>
+        <td>{{ d.cantidad }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br><br>
+
+<!-- ================= CSV ================= -->
+<h3>📊 Datos CSV</h3>
+<table border="1" style="width:80%; margin:auto; text-align:center;">
+    <tr>
+        <th>Modelo</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+    </tr>
+    {% for d in datos_csv %}
+    <tr>
+        <td>{{ d.modelo }}</td>
+        <td>{{ d.precio }}</td>
+        <td>{{ d.cantidad }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,4 +1,10 @@
 import sqlite3
+import os
+import json
+import csv
+
+DATA_PATH = os.path.join(os.path.dirname(__file__), "data")
+os.makedirs(DATA_PATH, exist_ok=True)
 
 class Pieza:
     """Clase Producto: Define los atributos y métodos de obtención"""
@@ -113,3 +119,79 @@ class Catalogo:
             print("Producto actualizado correctamente.")
         else:
             print("Producto no encontrado.")
+
+# ---------- PERSISTENCIA TXT ----------
+def guardar_txt(producto):
+    ruta = os.path.join(DATA_PATH, "datos.txt")
+    with open(ruta, "a", encoding="utf-8") as f:
+        f.write(f"{producto['modelo']},{producto['precio']},{producto['cantidad']}\n")
+
+def leer_txt():
+    ruta = os.path.join(DATA_PATH, "datos.txt")
+    productos = []
+    if os.path.exists(ruta):
+        with open(ruta, "r", encoding="utf-8") as f:
+            for linea in f:
+                productos.append(linea.strip().split(","))
+    return productos
+
+
+# ---------- PERSISTENCIA JSON ----------
+def guardar_json(producto):
+    ruta = os.path.join(DATA_PATH, "datos.json")
+    datos = []
+
+    if os.path.exists(ruta):
+        with open(ruta, "r", encoding="utf-8") as f:
+            try:
+                datos = json.load(f)
+            except:
+                datos = []
+
+    datos.append(producto)
+
+    with open(ruta, "w", encoding="utf-8") as f:
+        json.dump(datos, f, indent=4)
+
+def leer_json():
+    ruta = os.path.join(DATA_PATH, "datos.json")
+    if os.path.exists(ruta):
+        with open(ruta, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+# ---------- PERSISTENCIA CSV ----------
+def guardar_csv(producto):
+    ruta = os.path.join(DATA_PATH, "datos.csv")
+    archivo_existe = os.path.exists(ruta)
+
+    with open(ruta, mode='a', newline='', encoding='utf-8') as archivo:
+        campos = ["modelo", "precio", "cantidad"]
+        escritor = csv.DictWriter(archivo, fieldnames=campos)
+
+        if not archivo_existe:
+            escritor.writeheader()
+
+        escritor.writerow(producto)
+
+def leer_csv():
+    ruta = os.path.join(DATA_PATH, "datos.csv")
+    datos = []
+
+    if not os.path.exists(ruta):
+        return datos
+
+    with open(ruta, mode='r', newline='', encoding='utf-8') as archivo:
+        lector = csv.reader(archivo)
+
+        for fila in lector:
+            # Ignorar filas vacías
+            if len(fila) == 3:
+                datos.append({
+                    "modelo": fila[0],
+                    "precio": fila[1],
+                    "cantidad": fila[2]
+                })
+
+    return datos

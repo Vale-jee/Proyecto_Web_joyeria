@@ -1,0 +1,22 @@
+[
+    {
+        "modelo": "Solitario Diamante",
+        "precio": 450.0,
+        "cantidad": 5
+    },
+    {
+        "modelo": "Pulsera Dijes Coraz\u00f3n",
+        "precio": 70.0,
+        "cantidad": 3
+    },
+    {
+        "modelo": "Pendientes de Rub\u00ed",
+        "precio": 920.0,
+        "cantidad": 4
+    },
+    {
+        "modelo": "Pulsera de Cadena",
+        "precio": 120.0,
+        "cantidad": 5
+    }
+]

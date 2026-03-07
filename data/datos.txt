@@ -1,0 +1,4 @@
+Solitario Diamante,450.0,5
+Pulsera Dijes Corazón,70.0,3
+Pendientes de Rubí,920.0,4
+Pulsera de Cadena,120.0,5
