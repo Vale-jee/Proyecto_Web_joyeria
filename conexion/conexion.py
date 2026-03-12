@@ -1,4 +1,4 @@
-import mysql.connector
+import mysql.connector as mysql
 from flask import current_app
 
 def get_db_connection():
