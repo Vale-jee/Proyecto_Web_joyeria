@@ -8,11 +8,11 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__, template_folder='templates')
-app.config['MYSQL_HOST'] = os.getenv("MYSQLHOST")
-app.config['MYSQL_USER'] = os.getenv("MYSQLUSER")
-app.config['MYSQL_PASSWORD'] = os.getenv("MYSQLPASSWORD")
-app.config['MYSQL_DATABASE'] = os.getenv("MYSQLDATABASE")
-app.config['MYSQL_PORT'] = os.getenv("MYSQLPORT")
+app.config['MYSQL_HOST'] = os.getenv("MYSQLHOST", "localhost")
+app.config['MYSQL_USER'] = os.getenv("MYSQLUSER", "root")
+app.config['MYSQL_PASSWORD'] = os.getenv("MYSQLPASSWORD", "")
+app.config['MYSQL_DATABASE'] = os.getenv("MYSQLDATABASE", "joyeria_resplandor_mysql")
+app.config['MYSQL_PORT'] = int(os.getenv("MYSQLPORT", 3306))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'joyeria_orm.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True

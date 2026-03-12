@@ -1,11 +1,12 @@
-import mysql.connector as mysql
-from flask import current_app
+import mysql.connector
+import os
 
 def get_db_connection():
-    conexion = mysql.connect(
-        host=current_app.config['MYSQL_HOST'],
-        user=current_app.config['MYSQL_USER'],
-        password=current_app.config['MYSQL_PASSWORD'],
-        database=current_app.config['MYSQL_DATABASE']
+    conexion = mysql.connector.connect(
+        host=os.environ.get("MYSQLHOST"),
+        user=os.environ.get("MYSQLUSER"),
+        password=os.environ.get("MYSQLPASSWORD"),
+        database=os.environ.get("MYSQLDATABASE"),
+        port=os.environ.get("MYSQLPORT")
     )
     return conexion
