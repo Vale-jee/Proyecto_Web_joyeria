@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 style="text-align:center;">Base de Datos MySQL</h2>
+
+<!-- ================= PRODUCTOS MYSQL ================= -->
+
+<h3>Inventario MySQL</h3>
+
+<form method="POST" action="/agregar_producto_mysql">
+
+<input type="text" name="modelo" placeholder="Modelo" required>
+<input type="text" name="coleccion" placeholder="Colección" required>
+<input type="text" name="material" placeholder="Material" required>
+<input type="text" name="peso" placeholder="Peso" required>
+<input type="number" name="cantidad" placeholder="Cantidad" required>
+<input type="number" step="0.01" name="precio" placeholder="Precio" required>
+
+<button type="submit">Agregar Producto</button>
+
+</form>
+
+<br>
+
+<table border="1" style="width:90%; text-align:center;">
+
+<tr>
+<th>ID</th>
+<th>Modelo</th>
+<th>Colección</th>
+<th>Material</th>
+<th>Peso</th>
+<th>Cantidad</th>
+<th>Precio</th>
+<th>Acciones</th>
+</tr>
+
+{% for p in productos %}
+
+<tr>
+
+<td>{{p[0]}}</td>
+<td>{{p[1]}}</td>
+<td>{{p[2]}}</td>
+<td>{{p[3]}}</td>
+<td>{{p[4]}}</td>
+<td>{{p[5]}}</td>
+<td>{{p[6]}}</td>
+
+<td>
+<a href="/eliminar_producto_mysql/{{p[0]}}">Eliminar</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br><br>
+
+<!-- ================= USUARIOS MYSQL ================= -->
+
+<h3>Usuarios</h3>
+
+<h3>Agregar / Editar Usuario</h3>
+
+<form method="POST" action="/agregar_usuario_mysql">
+
+<input type="hidden" name="id_usuario" value="{{usuario_editar[0] if usuario_editar}}">
+
+<input type="text" name="nombre"
+value="{{usuario_editar[1] if usuario_editar}}" placeholder="Nombre" required>
+
+<input type="email" name="email"
+value="{{usuario_editar[2] if usuario_editar}}" placeholder="Email" required>
+
+<input type="text" name="password"
+value="{{usuario_editar[3] if usuario_editar}}" placeholder="Teléfono" required>
+
+<button type="submit">
+
+{% if usuario_editar %}
+Actualizar Usuario
+{% else %}
+Agregar Usuario
+{% endif %}
+
+</button>
+
+</form>
+
+<br>
+
+<table border="1" style="width:70%; text-align:center;">
+
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Email</th>
+<th>Teléfono</th>
+<th>Acciones</th>
+</tr>
+
+{% for u in usuarios %}
+
+<tr>
+
+<td>{{u[0]}}</td>
+<td>{{u[1]}}</td>
+<td>{{u[2]}}</td>
+<td>{{u[3]}}</td>
+
+<td>
+<a href="/mysql?editar={{u[0]}}">Editar</a> |
+<a href="/eliminar_usuario_mysql/{{u[0]}}">Eliminar</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

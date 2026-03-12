@@ -2,11 +2,16 @@ from flask import Flask, render_template, request, redirect # 'request' para det
 from flask_sqlalchemy import SQLAlchemy
 from inventario import Catalogo 
 from inventario import guardar_txt, guardar_json, guardar_csv, leer_txt, leer_json, leer_csv
+from conexion.conexion import get_db_connection
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__, template_folder='templates')
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DATABASE'] = 'joyeria_resplandor_mysql'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'joyeria_orm.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -46,19 +51,24 @@ def about():
 
 @app.route('/producto')
 def catalogo():
-    mi_catalogo = Catalogo() 
-    piezas = mi_catalogo.obtener_todo()
-    
-    # Detecta si se hizo clic en una colección
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM productos_mysql")
+    piezas = cursor.fetchall()
+
     col_elegida = request.args.get('coleccion')
-    
+
     if col_elegida:
-        # Filtra productos por esa colección
-        filtradas = [p for p in piezas if p.coleccion == col_elegida]
+        filtradas = [p for p in piezas if p['coleccion'] == col_elegida]
+        cursor.close()
+        conn.close()
         return render_template('producto.html', joyas=filtradas, titulo=col_elegida, modo="piezas")
     else:
-        # Saca lista de nombres únicos de colecciones
-        nombres_col = sorted(list(set(p.coleccion for p in piezas)))
+        nombres_col = sorted(list(set(p['coleccion'] for p in piezas)))
+        cursor.close()
+        conn.close()
         return render_template('producto.html', lista_col=nombres_col, modo="colecciones")
 
 @app.route('/producto/<nombre>')
@@ -142,11 +152,19 @@ def buscar():
 
 @app.route('/ver_datos')
 def ver_datos():
-    from inventario import leer_txt, leer_json, leer_csv
-    
-    datos_txt = leer_txt()
-    datos_json = leer_json()
-    datos_csv = leer_csv()
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT modelo, precio, cantidad FROM productos_mysql")
+    datos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    datos_txt = datos
+    datos_json = [{"modelo": d[0], "precio": d[1], "cantidad": d[2]} for d in datos]
+    datos_csv = [{"modelo": d[0], "precio": d[1], "cantidad": d[2]} for d in datos]
 
     return render_template(
         'datos.html',
@@ -195,6 +213,218 @@ def eliminar_mensaje(id):
         db.session.commit()
 
     return redirect('/contacto')
+
+
+
+@app.route('/mysql')
+def mysql():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    editar_id = request.args.get('editar')
+    usuario_editar = None
+
+    if editar_id:
+        cursor.execute(
+            "SELECT * FROM usuarios WHERE id_usuario=%s",
+            (editar_id,)
+        )
+        usuario_editar = cursor.fetchone()
+
+    cursor.execute("SELECT * FROM usuarios")
+    usuarios = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM productos_mysql")
+    productos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "mysql.html",
+        usuarios=usuarios,
+        productos=productos,
+        usuario_editar=usuario_editar
+    )
+@app.route('/agregar_producto_mysql', methods=['POST'])
+def agregar_producto_mysql():
+
+    modelo = request.form['modelo']
+    coleccion = request.form['coleccion']
+    material = request.form['material']
+    peso = request.form['peso']
+    cantidad = request.form['cantidad']
+    precio = request.form['precio']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO productos_mysql
+        (modelo,coleccion,material,peso,cantidad,precio)
+        VALUES (%s,%s,%s,%s,%s,%s)
+        """,
+        (modelo,coleccion,material,peso,cantidad,precio)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # -------- SINCRONIZAR CON PERSISTENCIA --------
+
+    producto_dict = {
+        "modelo": modelo,
+        "precio": float(precio),
+        "cantidad": int(cantidad)
+    }
+
+    guardar_txt(producto_dict)
+    guardar_json(producto_dict)
+    guardar_csv(producto_dict)
+
+    return redirect('/mysql')
+
+@app.route('/eliminar_producto_mysql/<int:id>')
+def eliminar_producto_mysql(id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # primero obtenemos el producto para saber su modelo
+    cursor.execute(
+        "SELECT modelo FROM productos_mysql WHERE id_producto=%s",
+        (id,)
+    )
+    producto = cursor.fetchone()
+
+    # eliminamos en MySQL
+    cursor.execute(
+        "DELETE FROM productos_mysql WHERE id_producto=%s",
+        (id,)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    # -------- eliminar también de persistencia --------
+
+    if producto:
+        modelo = producto[0]
+
+        datos_txt = leer_txt()
+        datos_txt = [d for d in datos_txt if d[0] != modelo]
+
+        datos_json = leer_json()
+        datos_json = [d for d in datos_json if d["modelo"] != modelo]
+
+        datos_csv = leer_csv()
+        datos_csv = [d for d in datos_csv if d["modelo"] != modelo]
+
+    # --------------------------------------------------
+
+    return redirect('/mysql')
+
+@app.route('/editar_producto_mysql/<int:id>', methods=['POST'])
+def editar_producto_mysql(id):
+
+    modelo = request.form['modelo']
+    coleccion = request.form['coleccion']
+    material = request.form['material']
+    peso = request.form['peso']
+    cantidad = request.form['cantidad']
+    precio = request.form['precio']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE productos_mysql
+        SET modelo=%s, coleccion=%s, material=%s, peso=%s, cantidad=%s, precio=%s
+        WHERE id_producto=%s
+        """,
+        (modelo,coleccion,material,peso,cantidad,precio,id)
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect('/mysql')
+
+@app.route('/agregar_usuario_mysql', methods=['POST'])
+def agregar_usuario_mysql():
+
+    id_usuario = request.form.get('id_usuario')
+    nombre = request.form['nombre']
+    email = request.form['email']
+    telefono = request.form['password']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if id_usuario:
+        cursor.execute(
+            """
+            UPDATE usuarios
+            SET nombre=%s, email=%s, telefono=%s
+            WHERE id_usuario=%s
+            """,
+            (nombre, email, telefono, id_usuario)
+        )
+    else:
+        cursor.execute(
+            """
+            INSERT INTO usuarios (nombre, email, telefono)
+            VALUES (%s, %s, %s)
+            """,
+            (nombre, email, telefono)
+        )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect('/mysql')
+
+@app.route('/editar_usuario_mysql/<int:id>', methods=['GET','POST'])
+def editar_usuario_mysql(id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+
+        nombre = request.form['nombre']
+        email = request.form['email']
+        telefono = request.form['password']
+
+        cursor.execute(
+            """
+            UPDATE usuarios
+            SET nombre=%s, email=%s, telefono=%s
+            WHERE id_usuario=%s
+            """,
+            (nombre, email, telefono, id)
+        )
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return redirect('/mysql')
+
+    cursor.execute("SELECT * FROM usuarios WHERE id_usuario=%s", (id,))
+    usuario = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("editar_usuario_mysql.html", usuario=usuario)
 
 
 if __name__ == "__main__":
