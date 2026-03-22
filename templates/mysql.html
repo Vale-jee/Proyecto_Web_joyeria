@@ -1,3 +1,12 @@
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div style="background: #d4edda; padding: 10px; color: #155724; margin-bottom: 10px;">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 {% extends 'base.html' %}
 
 {% block content %}
@@ -9,15 +18,33 @@
 <h3>Inventario MySQL</h3>
 
 <form method="POST" action="/agregar_producto_mysql">
+<input type="hidden" name="id_producto"
+value="{{ producto_editar[0] if producto_editar }}">
 
-<input type="text" name="modelo" placeholder="Modelo" required>
-<input type="text" name="coleccion" placeholder="Colección" required>
-<input type="text" name="material" placeholder="Material" required>
-<input type="text" name="peso" placeholder="Peso" required>
-<input type="number" name="cantidad" placeholder="Cantidad" required>
-<input type="number" step="0.01" name="precio" placeholder="Precio" required>
+<input type="text" name="modelo"
+value="{{ producto_editar[1] if producto_editar }}" placeholder="Modelo" required>
 
-<button type="submit">Agregar Producto</button>
+<input type="text" name="coleccion"
+value="{{ producto_editar[2] if producto_editar }}" placeholder="Colección" required>
+
+<input type="text" name="material"
+value="{{ producto_editar[3] if producto_editar }}" placeholder="Material" required>
+
+<input type="text" name="peso"
+value="{{ producto_editar[4] if producto_editar }}" placeholder="Peso" required>
+
+<input type="number" name="cantidad"
+value="{{ producto_editar[5] if producto_editar }}" placeholder="Cantidad" required>
+
+<input type="number" step="0.01" name="precio"
+value="{{ producto_editar[6] if producto_editar }}" placeholder="Precio" required>
+<button type="submit">
+    {% if producto_editar %}
+        Actualizar Producto
+    {% else %}
+        Agregar Producto
+    {% endif %}
+</button>
 
 </form>
 
@@ -50,6 +77,8 @@
 
 <td>
 <a href="/eliminar_producto_mysql/{{p[0]}}">Eliminar</a>
+<a href="/mysql?editar={{ p[0] }}">Editar</a>
+
 </td>
 
 </tr>
@@ -68,26 +97,19 @@
 
 <form method="POST" action="/agregar_usuario_mysql">
 
-<input type="hidden" name="id_usuario" value="{{usuario_editar[0] if usuario_editar}}">
+<input type="hidden" name="id_usuario" value="{{ usuario_editar[0] if usuario_editar }}">
 
 <input type="text" name="nombre"
-value="{{usuario_editar[1] if usuario_editar}}" placeholder="Nombre" required>
+value="{{ usuario_editar[1] if usuario_editar }}" placeholder="Nombre" required>
 
 <input type="email" name="email"
-value="{{usuario_editar[2] if usuario_editar}}" placeholder="Email" required>
+value="{{ usuario_editar[2] if usuario_editar }}" placeholder="Email" required>
 
-<input type="text" name="password"
-value="{{usuario_editar[3] if usuario_editar}}" placeholder="Teléfono" required>
+<input type="password" name="password"
+value="{{ usuario_editar[3] if usuario_editar }}" placeholder="Password" required>
 
-<button type="submit">
+<button type="submit">Agregar usuario</button>
 
-{% if usuario_editar %}
-Actualizar Usuario
-{% else %}
-Agregar Usuario
-{% endif %}
-
-</button>
 
 </form>
 
@@ -99,7 +121,7 @@ Agregar Usuario
 <th>ID</th>
 <th>Nombre</th>
 <th>Email</th>
-<th>Teléfono</th>
+<th>Password</th>
 <th>Acciones</th>
 </tr>
 
@@ -110,11 +132,13 @@ Agregar Usuario
 <td>{{u[0]}}</td>
 <td>{{u[1]}}</td>
 <td>{{u[2]}}</td>
-<td>{{u[3]}}</td>
+<td>********</td>
 
 <td>
-<a href="/mysql?editar={{u[0]}}">Editar</a> |
+
 <a href="/eliminar_usuario_mysql/{{u[0]}}">Eliminar</a>
+
+
 </td>
 
 </tr>
