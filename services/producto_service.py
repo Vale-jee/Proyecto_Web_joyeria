@@ -2,24 +2,10 @@ import sqlite3
 import os
 import json
 import csv
+from models.producto import Pieza
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data")
 os.makedirs(DATA_PATH, exist_ok=True)
-
-class Pieza:
-    """Clase Producto: Define los atributos y métodos de obtención"""
-
-    def __init__(self, id, modelo, coleccion, material, peso, cantidad, precio):
-        self.id = id
-        self.modelo = modelo
-        self.coleccion = coleccion
-        self.material = material
-        self.peso = peso
-        self.cantidad = cantidad
-        self.precio = precio
-
-    def obtener_datos(self):
-        return f"{self.modelo} - {self.material} ({self.peso})"
 
 
 class Catalogo:

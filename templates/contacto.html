@@ -1,66 +1,89 @@
 {% extends 'base.html' %}
 
+{% block title %}Contacto - Joyería Resplandor{% endblock %}
+
 {% block content %}
 
-<h2 class="titulo-contacto">📩 Contáctanos</h2>
+<section class="contacto-container">
 
-{% if mensaje_enviado %}
-<div class="mensaje-exito">
-    ✅ Mensaje enviado correctamente
-</div>
-{% endif %}
+    <h2>📞 Contáctanos</h2>
+    <p class="contacto-sub">
+        Estamos para ayudarte a elegir la joya perfecta ✨
+    </p>
 
-<div class="card-contacto">
+    <div class="contacto-grid">
 
-<form method="POST">
+        <!-- FORMULARIO -->
+        <div class="contacto-form">
 
-<input type="text" name="nombre" placeholder="Tu nombre" required class="input-contacto">
+            <form method="POST" class="form-contacto">
 
-<input type="email" name="email" placeholder="Tu email" required class="input-contacto">
+                <div class="grid-contacto">
 
-<input type="tel" name="telefono" placeholder="Número de teléfono" required class="input-contacto">
+                    <input type="text" name="nombre" placeholder="Nombre" required>
 
-<textarea name="mensaje" placeholder="Escribe tu mensaje..." required class="textarea-contacto"></textarea>
+                    <input type="email" name="email" placeholder="Correo" required>
 
-<button type="submit" class="btn-enviar">
-    Enviar Mensaje
-</button>
+                    <input type="text" name="telefono" placeholder="Teléfono" required>
 
-</form>
+                    <textarea name="mensaje" placeholder="Escribe tu mensaje..." required></textarea>
 
-<h3 class="titulo-mensajes">Mensajes recibidos</h3>
+                </div>
 
-<table class="tabla-mensajes">
+                <button type="submit" class="btn-enviar">
+                    Enviar Mensaje
+                </button>
 
-<tr>
-<th>ID</th>
-<th>Nombre</th>
-<th>Email</th>
-<th>Teléfono</th>
-<th>Mensaje</th>
-<th>Eliminar</th>
-</tr>
+            </form>
 
-{% for m in mensajes %}
-<tr>
+        </div>
 
-<td>{{ m.id }}</td>
-<td class="col-nombre">{{ m.nombre }}</td>
-<td>{{ m.email }}</td>
-<td>{{ m.telefono }}</td>
-<td>{{ m.mensaje }}</td>
+        <!-- INFO -->
+        <div class="contacto-info">
 
-<td>
-<a href="/eliminar_mensaje/{{ m.id }}" class="btn-eliminar">
-Eliminar
-</a>
-</td>
+            <h3>Atención directa</h3>
 
-</tr>
-{% endfor %}
+            <p>📍 Quito, Ecuador</p>
+            <p>📧 joyeria@email.com</p>
+            <p>📞 +593 987 618 717</p>
 
-</table>
+            <hr>
 
-</div>
+            <a href="https://wa.me/593987618717" target="_blank" class="btn-whatsapp">
+                💬 Chatear por WhatsApp
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- MENSAJES RECIBIDOS -->
+    <div class="mensajes-container">
+
+        <h3>📩 Mensajes recibidos</h3>
+
+        <table class="tabla-mensajes">
+
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Mensaje</th>
+            </tr>
+
+            {% for m in mensajes %}
+            <tr>
+                <td>{{ m.nombre }}</td>
+                <td>{{ m.email }}</td>
+                <td>{{ m.telefono }}</td>
+                <td>{{ m.mensaje }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</section>
 
 {% endblock %}

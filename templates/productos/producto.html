@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo - Joyería Resplandor{% endblock %}
+
+{% block content %}
+
+<section class="catalogo">
+
+    {% if modo == "colecciones" %}
+
+    <div class="titulo-seccion">
+        <h2>Nuestras Colecciones</h2>
+        <p>Seleccione una línea exclusiva</p>
+    </div>
+
+    <div class="grid-colecciones">
+        {% for col in lista_col %}
+        <a href="{{ url_for('catalogo', coleccion=col) }}" class="card-coleccion">
+            ✨ {{ col|upper }}
+        </a>
+        {% endfor %}
+    </div>
+
+    {% else %}
+
+    <a href="{{ url_for('catalogo') }}" class="volver">
+        ← Volver
+    </a>
+
+    <div class="titulo-seccion">
+        <h2>Colección: {{ titulo }}</h2>
+    </div>
+
+    <div class="grid-productos">
+
+        {% for joya in joyas %}
+        <div class="card-producto">
+
+            <img src="{{ joya.imagen if joya.imagen else url_for('static', filename='img/default.jpg') }}" class="img-producto">
+
+            <h3>{{ joya.modelo }}</h3>
+
+            <p class="detalle">
+                {{ joya.material }} | {{ joya.peso }}
+            </p>
+
+            <p class="precio">
+                ${{ joya.precio }}
+            </p>
+
+            <a href="{{ url_for('detalle_producto', nombre=joya.modelo) }}" class="btn-ver">
+                Ver más
+            </a>
+
+            <a href="{{ url_for('agregar_carrito', id=joya.id_producto) }}" class="btn-carrito">
+                🛒 Comprar
+            </a>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

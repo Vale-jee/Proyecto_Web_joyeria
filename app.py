@@ -4,15 +4,23 @@
 
 from flask import Flask, render_template, request, redirect, flash  # Flask y funciones básicas
 from flask_sqlalchemy import SQLAlchemy  # ORM para SQLite
-from inventario import Catalogo
-from inventario import guardar_txt, guardar_json, guardar_csv, leer_txt, leer_json, leer_csv
+from services.producto_service import Catalogo
+from forms.producto_form import ProductoForm
+from services.producto_service import guardar_txt, guardar_json, guardar_csv, leer_txt, leer_json, leer_csv
 from conexion.conexion import get_db_connection  # conexión MySQL
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+from flask import session
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from flask import make_response
 from dotenv import load_dotenv
 load_dotenv()
 import os
+import io
 
 
 # ======================================================
@@ -126,6 +134,26 @@ def about():
 # CATÁLOGO DE PRODUCTOS (MYSQL)
 # ======================================================
 
+@app.route('/agregar_carrito/<int:id>')
+def agregar_carrito(id):
+
+    if 'carrito' not in session:
+        session['carrito'] = []
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM productos_mysql WHERE id_producto=%s", (id,))
+    producto = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if producto:
+        session['carrito'].append(producto)
+
+    return redirect('/carrito')
+
 @app.route('/producto')
 def catalogo():
 
@@ -144,7 +172,7 @@ def catalogo():
         cursor.close()
         conn.close()
 
-        return render_template('producto.html', joyas=filtradas, titulo=col_elegida, modo="piezas")
+        return render_template('productos/producto.html', joyas=filtradas, titulo=col_elegida, modo="piezas")
 
     else:
 
@@ -153,9 +181,38 @@ def catalogo():
         cursor.close()
         conn.close()
 
-        return render_template('producto.html', lista_col=nombres_col, modo="colecciones")
+        return render_template('productos/producto.html', lista_col=nombres_col, modo="colecciones")
 
+@app.route('/carrito')
+def carrito():
 
+    carrito = session.get('carrito', [])
+    total = sum(float(p['precio']) for p in carrito)
+
+    return render_template('carrito.html', carrito=carrito, total=total)
+
+@app.route('/eliminar_carrito/<int:index>')
+def eliminar_carrito(index):
+
+    carrito = session.get('carrito', [])
+
+    if 0 <= index < len(carrito):
+        carrito.pop(index)
+        session['carrito'] = carrito
+
+    return redirect('/carrito')
+
+@app.route('/vaciar_carrito')
+def vaciar_carrito():
+    session.pop('carrito', None)
+    return redirect('/carrito')
+
+@app.route('/comprar')
+def comprar():
+
+    session.pop('carrito', None)
+
+    return "<h2 style='text-align:center;'>✅ Compra realizada con éxito</h2>"
 
 # ======================================================
 # INVENTARIO (PROTEGIDO POR LOGIN)
@@ -183,12 +240,14 @@ def agregar():
 
     if request.method == 'POST':
 
-        modelo = request.form['modelo']
-        coleccion = request.form['coleccion']
-        material = request.form['material']
-        peso = request.form['peso']
-        cantidad = int(request.form['cantidad'])
-        precio = float(request.form['precio'])
+        form = ProductoForm(request.form)
+
+        modelo = form.modelo
+        coleccion = form.coleccion
+        material = form.material
+        peso = form.peso
+        cantidad = int(form.cantidad)
+        precio = float(form.precio)
 
         mi_catalogo.añadir_pieza(modelo, coleccion, material, peso, cantidad, precio)
 
@@ -474,7 +533,7 @@ def detalle_producto(nombre):
     cursor.close()
     conn.close()
 
-    return render_template('detalle.html', joya=joya)
+    return render_template('productos/detalle.html', joya=joya)
 
 @app.route('/agregar_producto_mysql', methods=['POST'])
 def agregar_producto_mysql():
@@ -577,6 +636,75 @@ def agregar_usuario_mysql():
 def logout():
     logout_user()
     return redirect('/login')
+
+# PDF
+
+@app.route('/reporte_pdf')
+@login_required
+def reporte_pdf():
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""SELECT modelo, coleccion, material, precio, cantidad FROM productos_mysql""")
+    productos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    buffer = io.BytesIO()
+
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+
+    elements = []
+
+    styles = getSampleStyleSheet()
+
+    # 👉 TÍTULO
+    titulo = Paragraph("REPORTE DE PRODUCTOS - JOYERÍA RESPLANDOR", styles['Title'])
+    elements.append(titulo)
+
+    # 👉 ESPACIO
+    elements.append(Paragraph("<br/><br/>", styles['Normal']))
+
+    # 👉 DATOS DE LA TABLA
+    data = [["Producto", "Colección", "Material", "Precio", "Stock"]]
+
+    for p in productos:
+        data.append([p[0], f"${p[1]}", p[2], f"${p[3]}", p[4]])
+
+    # 👉 CREAR TABLA
+    tabla = Table(data)
+
+    # 👉 ESTILO BONITO
+    estilo = TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.gold),
+        ('TEXTCOLOR',(0,0),(-1,0),colors.black),
+
+        ('ALIGN',(0,0),(-1,-1),'CENTER'),
+
+        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0,0), (-1,0), 10),
+
+        ('BACKGROUND',(0,1),(-1,-1),colors.whitesmoke),
+
+        ('GRID', (0,0), (-1,-1), 1, colors.black),
+    ])
+
+    tabla.setStyle(estilo)
+
+    elements.append(tabla)
+
+    doc.build(elements)
+
+    buffer.seek(0)
+
+    response = make_response(buffer.getvalue())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=reporte_productos.pdf'
+
+    return response
+
 # ======================================================
 # EJECUCIÓN DE LA APLICACIÓN
 # ======================================================

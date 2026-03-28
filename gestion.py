@@ -1,4 +1,4 @@
-from inventario import Catalogo
+from services.producto_service import Catalogo
 
 def menu():
     cat = Catalogo()

@@ -11,27 +11,27 @@
 <header class="header">
     <h1 class="titulo">💎 Joyería Resplandor</h1>
 
-    <nav class="menu">
-    {% if current_user.is_authenticated %}
+<nav class="menu">
 
-        <a href="/inventario">INVENTARIO</a>
-        <span>|</span>
-        <a href="/ver_datos">PERSISTENCIA</a>
-        <span>|</span>
-        <a href="/mysql">MYSQL BD</a>
+{% if current_user.is_authenticated %}
 
-    {% else %}
+    <a href="/">INICIO</a>
+    <a href="/carrito">🛒 CARRITO</a>
+    <a href="/inventario">ADMIN</a>
+    <a href="/mysql">MYSQL</a>
 
-        <a href="/">INICIO</a>
-        <span>|</span>
-        <a href="/about">NOSOTROS</a>
-        <span>|</span>
-        <a href="/contacto">CONTACTO</a>
-        <span>|</span>
-        <a href="/login">LOGIN</a>
+{% else %}
 
-    {% endif %}
-    </nav>
+    <a href="/">INICIO</a>
+    <a href="/about">NOSOTROS</a>
+    <a href="/contacto">CONTACTO</a>
+    <a href="/carrito">🛒 CARRITO</a>
+    <a href="/login">LOGIN</a>
+
+{% endif %}
+
+</nav>
+
 </header>
 
 {% if current_user.is_authenticated %}

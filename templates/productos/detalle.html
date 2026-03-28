@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle - {{ joya.modelo }}{% endblock %}
+
+{% block content %}
+
+<section class="detalle-container">
+
+    <!-- VOLVER -->
+    <a href="javascript:history.back()" class="volver">
+        ⬅️ Volver a la colección
+    </a>
+
+    <!-- TÍTULO -->
+    <h1 class="detalle-titulo">💎 {{ joya.modelo }}</h1>
+    <p class="detalle-subtitulo">
+        Colección {{ joya.coleccion }} - Quito, Ecuador
+    </p>
+
+    <div class="detalle-grid">
+
+        <!-- IMAGEN -->
+        <div class="detalle-img">
+            <img src="{{ joya.imagen if joya.imagen else url_for('static', filename='img/default.jpg') }}" class="img-detalle">
+        </div>
+
+        <!-- INFORMACIÓN -->
+        <div class="detalle-info">
+
+            <p><strong>Modelo:</strong> {{ joya.modelo }}</p>
+            <p><strong>Material:</strong> {{ joya.material }}</p>
+            <p><strong>Peso:</strong> {{ joya.peso }}</p>
+
+            <!-- DESCRIPCIÓN -->
+            <div class="descripcion">
+                <h4>Descripción de la pieza</h4>
+                <p>
+                    Esta exclusiva joya de la colección <strong>{{ joya.coleccion }}</strong> ha sido elaborada en 
+                    <strong>{{ joya.material }}</strong>, con un peso de <strong>{{ joya.peso }}</strong>.
+                    Un diseño elegante ideal para ocasiones especiales.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- PRECIO Y COMPRA -->
+        <div class="detalle-compra">
+
+            <p class="precio-label">Precio</p>
+            <h2 class="precio">${{ "{:,.2f}".format(joya.precio) }}</h2>
+
+            <p class="stock">
+                Stock disponible: {{ joya.cantidad }} unidades
+            </p>
+
+            <hr>
+
+            <p class="beneficios">
+                ✓ Certificado de autenticidad<br>
+                ✓ Garantía de calidad
+            </p>
+
+            <!-- BOTÓN WHATSAPP -->
+            <a href="https://wa.me/593XXXXXXXXX" target="_blank" class="btn-carrito">
+                📲 Comprar por WhatsApp
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

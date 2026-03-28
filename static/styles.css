@@ -558,3 +558,438 @@ box-shadow:0 6px 25px rgba(0,0,0,0.08);
 .dropdown a:hover {
     background-color: #f1f1f1;
 }
+/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f6f2;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background-color: #000;
+    color: gold;
+    padding: 15px;
+    text-align: center;
+}
+
+.titulo {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* ===== MENÚ ===== */
+.menu {
+    margin-top: 10px;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.menu a:hover {
+    color: gold;
+}
+
+/* ===== CONTENIDO ===== */
+.contenido {
+    padding: 20px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background-color: #000;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+/* ===== BOTONES ===== */
+.btn-guardar {
+    background-color: gold;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.btn-volver {
+    text-decoration: none;
+    color: black;
+    background: #ddd;
+    padding: 8px;
+}
+
+/* ===== FORMULARIOS ===== */
+.form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.form-editar {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-editar input {
+    margin-bottom: 10px;
+    padding: 8px;
+}
+
+/* ===== TABLAS ===== */
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+}
+
+/* ===== USER MENU ===== */
+.user-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.dropdown {
+    display: none;
+    background: white;
+    border: 1px solid #ccc;
+    position: absolute;
+}
+
+/* ===== MODAL ===== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background: white;
+    padding: 20px;
+}
+/* ===== CATÁLOGO ===== */
+
+.catalogo {
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* TÍTULOS */
+.titulo-seccion {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.titulo-seccion h2 {
+    color: #b8860b;
+}
+
+/* GRID COLECCIONES */
+.grid-colecciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+/* TARJETAS COLECCIÓN */
+.card-coleccion {
+    background: black;
+    color: gold;
+    padding: 30px;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid gold;
+    font-weight: bold;
+}
+
+/* GRID PRODUCTOS */
+.grid-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* TARJETA PRODUCTO */
+.card-producto {
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card-producto:hover {
+    transform: scale(1.05);
+}
+
+/* IMAGEN */
+.img-producto {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* DETALLE */
+.detalle {
+    color: #666;
+    font-size: 14px;
+}
+
+/* PRECIO */
+.precio {
+    color: #b8860b;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* BOTONES */
+.btn-ver {
+    display: block;
+    margin: 10px 0;
+    text-decoration: none;
+    color: black;
+}
+
+.btn-carrito {
+    background: gold;
+    padding: 8px;
+    text-decoration: none;
+    display: block;
+}
+
+/* VOLVER */
+.volver {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #b8860b;
+}
+/* ===== DETALLE PRODUCTO ===== */
+
+.detalle-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+}
+
+.detalle-titulo {
+    color: #1a1a1a;
+}
+
+.detalle-subtitulo {
+    color: #b8860b;
+    font-weight: bold;
+}
+
+/* GRID */
+.detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+/* IMAGEN */
+.img-detalle {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+}
+
+/* INFO */
+.detalle-info {
+    font-size: 16px;
+}
+
+/* DESCRIPCIÓN */
+.descripcion {
+    margin-top: 20px;
+    background: #fdfaf3;
+    padding: 15px;
+    border-left: 5px solid #b8860b;
+}
+
+/* COMPRA */
+.detalle-compra {
+    grid-column: span 2;
+    background: #1a1a1a;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* PRECIO */
+.precio-label {
+    color: #d4af37;
+}
+
+.precio {
+    font-size: 30px;
+}
+
+/* STOCK */
+.stock {
+    font-size: 14px;
+}
+
+/* BENEFICIOS */
+.beneficios {
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+/* BOTÓN */
+.btn-carrito {
+    display: block;
+    margin-top: 15px;
+    background: gold;
+    color: black;
+    padding: 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* VOLVER */
+.volver {
+    text-decoration: none;
+    color: #b8860b;
+}
+/* ===== CARRITO ===== */
+
+.carrito-container {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+.tabla-carrito {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla-carrito th, .tabla-carrito td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.btn-eliminar {
+    color: red;
+    text-decoration: none;
+}
+
+.btn-vaciar {
+    background: #ccc;
+    padding: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.btn-comprar {
+    background: gold;
+    padding: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.acciones-carrito {
+    margin-top: 20px;
+}
+/* MENSAJES */
+
+.mensajes-container {
+    margin-top: 40px;
+}
+
+.tabla-mensajes {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-mensajes th {
+    background: #b8860b;
+    color: white;
+}
+
+.tabla-mensajes th,
+.tabla-mensajes td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* GRID CONTACTO GENERAL */
+.contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* FORM */
+.form-contacto {
+    background: white;
+    padding: 25px;
+    border: 1px solid #d4af37;
+}
+
+/* GRID INTERNO DEL FORM */
+.grid-contacto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* textarea ocupa todo */
+.grid-contacto textarea {
+    grid-column: span 2;
+    height: 120px;
+}
+
+/* inputs */
+.form-contacto input,
+.form-contacto textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+}
+
+/* botón */
+.btn-enviar {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: #d4af37;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* INFO */
+.contacto-info {
+    background: #1a1a1a;
+    color: white;
+    padding: 25px;
+}
+
+/* WhatsApp */
+.btn-whatsapp {
+    display: block;
+    background: #25D366;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 15px;
+}
