@@ -630,8 +630,9 @@ def agregar_producto_mysql():
     coleccion = request.form['coleccion']
     material = request.form['material']
     peso = request.form['peso']
-    cantidad = request.form['cantidad']
-    precio = request.form['precio']
+    cantidad = int(request.form['cantidad'])
+    precio = float(request.form['precio'])
+    imagen = request.form.get('imagen', '')
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -641,28 +642,18 @@ def agregar_producto_mysql():
         cursor.execute("""
             UPDATE productos_mysql
             SET modelo=%s, coleccion=%s, material=%s,
-                peso=%s, cantidad=%s, precio=%s
+                peso=%s, cantidad=%s, precio=%s, imagen=%s
             WHERE id_producto=%s
-        """, (modelo, coleccion, material, peso, cantidad, precio, id_producto))
+        """, (modelo, coleccion, material, peso, cantidad, precio, imagen, id_producto))
 
     # ➕ AGREGAR
     else:
-        # 1. Buscar colección
-        cursor.execute("SELECT id_coleccion FROM colecciones WHERE nombre=%s", (coleccion,))
-        resultado = cursor.fetchone()
-
-        if resultado:
-            id_coleccion = resultado[0]
-        else:
-            cursor.execute("INSERT INTO colecciones (nombre) VALUES (%s)", (coleccion,))
-            id_coleccion = cursor.lastrowid
-
-        # INSERT 
         cursor.execute("""
             INSERT INTO productos_mysql
-            (modelo, coleccion, id_coleccion, material, peso, cantidad, precio, imagen)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-        """, (modelo, coleccion, id_coleccion, material, peso, cantidad, precio, "default.jpg")) 
+            (modelo, coleccion, material, peso, cantidad, precio, imagen)
+            VALUES (%s,%s,%s,%s,%s,%s,%s)
+        """, (modelo, coleccion, material, peso, cantidad, precio, imagen))
+
     conn.commit()
     cursor.close()
     conn.close()
