@@ -244,9 +244,10 @@ def comprar():
     for p in carrito:
         cursor.execute("""
             UPDATE productos_mysql
-            SET cantidad = cantidad - 1
+            SET cantidad = cantidad - %s
             WHERE id_producto = %s
-        """, (p['id_producto'],))
+        """, (int(p['cantidad']), (p['id_producto'],)))
+
 
     conn.commit()
     cursor.close()
