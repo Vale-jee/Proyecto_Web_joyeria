@@ -244,10 +244,9 @@ def comprar():
     for p in carrito:
         cursor.execute("""
             UPDATE productos_mysql
-            SET cantidad = cantidad - %s
+            SET cantidad = cantidad - 1
             WHERE id_producto = %s
-        """, (int(p['cantidad']), (p['id_producto'],)))
-
+        """, (p['id_producto'],))
 
     conn.commit()
     cursor.close()
@@ -844,4 +843,4 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 10000))
 
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)
