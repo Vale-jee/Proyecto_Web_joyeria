@@ -417,8 +417,10 @@ def buscar():
 # ======================================================
 
 @app.route('/ver_datos')
+@login_required
 def ver_datos():
-
+        
+    
     conn = get_db_connection()
     cursor = conn.cursor()
 
