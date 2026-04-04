@@ -33,10 +33,25 @@
 <h3>Total: ${{ total }}</h3>
 
 <div class="acciones-carrito">
-    <a href="/vaciar_carrito" class="btn-vaciar">Vaciar carrito</a>
-    <a href="/comprar" class="btn-comprar">Finalizar compra</a>
+
+    <a href="/producto" class="btn-seguir">
+        🛍️ Seguir comprando
+    </a>
+
+    <a href="/vaciar_carrito" class="btn-vaciar">
+        🗑️ Vaciar carrito
+    </a>
+
 </div>
 
+<form method="POST" action="/comprar">
+    <input type="text" name="nombre" placeholder="Nombre" required>
+    <input type="email" name="email" placeholder="Correo" required>
+
+    <button type="submit" class="btn-comprar">
+        Finalizar compra
+    </button>
+</form>
 {% else %}
 
 <p style="text-align:center;">Tu carrito está vacío</p>

@@ -993,3 +993,38 @@ th, td {
     text-decoration: none;
     margin-top: 15px;
 }
+.acciones-carrito {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* seguir comprando */
+.btn-seguir {
+    background: gold;
+    color: black;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* vaciar carrito */
+.btn-vaciar {
+    background: #222;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+/* comprar */
+.btn-comprar {
+    background: gold;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}

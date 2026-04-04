@@ -20,27 +20,53 @@ class Catalogo:
     def crear_tabla(self):
         conexion = sqlite3.connect(self.db_name)
         cursor = conexion.cursor()
+
+        # Tabla colecciones (NUEVA)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS colecciones (
+            id_coleccion INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT UNIQUE
+        )
+    ''')
+
+        # Tabla productos (MODIFICADA)
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS productos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                modelo TEXT,
-                coleccion TEXT,
-                material TEXT,
-                peso TEXT,
-                cantidad INTEGER,
-                precio REAL
-            )
-        ''')
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            modelo TEXT,
+            id_coleccion INTEGER,
+            material TEXT,
+            peso TEXT,
+            cantidad INTEGER,
+            precio REAL,
+            FOREIGN KEY (id_coleccion) REFERENCES colecciones(id_coleccion)
+        )
+    ''')
+
         conexion.commit()
         conexion.close()
 
     def añadir_pieza(self, modelo, coleccion, material, peso, cantidad, precio):
         conexion = sqlite3.connect(self.db_name)
         cursor = conexion.cursor()
+
+        # 1. Buscar colección
+        cursor.execute("SELECT id_coleccion FROM colecciones WHERE nombre = ?", (coleccion,))
+        resultado = cursor.fetchone()
+
+        if resultado:
+            id_coleccion = resultado[0]
+        else:
+            # 2. Insertar colección si no existe
+            cursor.execute("INSERT INTO colecciones (nombre) VALUES (?)", (coleccion,))
+            id_coleccion = cursor.lastrowid
+
+        # 3. Insertar producto con ID de colección
         cursor.execute(
-            "INSERT INTO productos (modelo, coleccion, material, peso, cantidad, precio) VALUES (?, ?, ?, ?, ?, ?)",
-            (modelo, coleccion, material, peso, cantidad, precio)
-        )
+            "INSERT INTO productos (modelo, id_coleccion, material, peso, cantidad, precio) VALUES (?, ?, ?, ?, ?, ?)",
+            (modelo, id_coleccion, material, peso, cantidad, precio)
+    )
+
         conexion.commit()
         conexion.close()
         self.sincronizar_diccionario()
@@ -48,7 +74,11 @@ class Catalogo:
     def obtener_todo(self):
         conexion = sqlite3.connect(self.db_name)
         cursor = conexion.cursor()
-        cursor.execute("SELECT * FROM productos")
+        cursor.execute("""
+            SELECT p.id, p.modelo, c.nombre, p.material, p.peso, p.cantidad, p.precio
+            FROM productos p
+            JOIN colecciones c ON p.id_coleccion = c.id_coleccion
+        """)
         filas = cursor.fetchall()
         conexion.close()
 
